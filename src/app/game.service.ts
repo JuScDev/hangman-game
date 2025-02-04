@@ -1,6 +1,7 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { GameStatus } from './models/models';
 import { GameConnectorService } from './game-connector.service';
+import { GamePersistenceService } from './game-persistence.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +21,15 @@ export class GameService {
 
   public readonly wordToGuess = signal('');
 
+  public readonly gamesWon = signal(0);
+
+  public readonly gamesLost = signal(0);
+
   private readonly _maxWrongGuesses = 10;
 
   private readonly _gameConnectorService = inject(GameConnectorService);
+
+  private readonly _gamePersistenceService = inject(GamePersistenceService);
 
   public async startNewGame(): Promise<void> {
     this.gameStatus.set(GameStatus.IN_PROGRESS);
@@ -54,7 +61,7 @@ export class GameService {
     if (!this.wordToGuess().includes(guessedLetter)) {
       this.wrongUserGuessesCount.update((wrongUserGuessesCount) => {
         if (wrongUserGuessesCount + 1 >= this._maxWrongGuesses) {
-          this.gameStatus.set(GameStatus.LOST);
+          this._finishGame(GameStatus.LOST);
         }
 
         return wrongUserGuessesCount + 1;
@@ -70,10 +77,30 @@ export class GameService {
       });
 
       if (!this.wordToGuessArray().includes('_')) {
-        this.gameStatus.set(GameStatus.WON);
+        this._finishGame(GameStatus.WON);
       }
     }
 
     return this.gameStatus();
+  }
+
+  public getWonGamesAmount(): number {
+    return this._gamePersistenceService.getWonGamesAmount();
+  }
+
+  public getLostGamesAmount(): number {
+    return this._gamePersistenceService.getLostGamesAmount();
+  }
+
+  private _finishGame(gameStatus: GameStatus): void {
+    this.gameStatus.set(gameStatus);
+
+    if (gameStatus === GameStatus.WON) {
+      this.gamesWon.update((gamesWon) => gamesWon + 1);
+      this._gamePersistenceService.addWonGamePersistence();
+    } else {
+      this.gamesLost.update((gamesLost) => gamesLost + 1);
+      this._gamePersistenceService.addLostGamePersistence();
+    }
   }
 }

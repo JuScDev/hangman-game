@@ -29,7 +29,12 @@
 
 <button (click)="gameService.startNewGame()">New Game</button>
 
+<h2>Your results</h2>
+<span>Games won: {{ gameService.getWonGamesAmount() }}</span>
+<span>Games lost: {{ gameService.getLostGamesAmount() }}</span>
+
 <dialog class="result-dialog" #resultDialog>
+  <button class="x-icon" (click)="closeDialog()">X</button>
   @if(gameService.gameStatus() === gameStatusEnum.WON) {
   <h1>Congratulations!</h1>
   <p>You won!</p>

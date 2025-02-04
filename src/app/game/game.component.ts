@@ -52,9 +52,15 @@ export class GameComponent {
     }
   }
 
-  public restartGame(): void {
+  public closeDialog(): void {
     if (this.resultDialog) {
       this.resultDialog.nativeElement.close();
+    }
+  }
+
+  public restartGame(): void {
+    if (this.resultDialog) {
+      this.closeDialog();
       this.gameService.startNewGame();
 
       if (this.inputElement) {
