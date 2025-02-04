@@ -1,0 +1,53 @@
+<h1 class="headline">Hangman</h1>
+<app-hangman-svg
+  [wrongUserGuessesCount]="gameService.wrongUserGuessesCount()"
+/>
+
+<div class="word-to-guess">
+  @for(letter of gameService.wordToGuessArray(); track $index; let last = $last)
+  {
+  <span class="letter">{{ letter }}</span>
+
+  @if(!last) {
+  <span>&nbsp;</span>
+  } }
+</div>
+<span>Last guesses: {{ gameService.alreadyGuessedLetters() }}</span>
+<div class="guess-letter">
+  <input
+    #input
+    type="text"
+    [disabled]="gameNotInProgress"
+    maxlength="1"
+    (keyup.enter)="submitGuessedLetter()"
+  />
+  <button [disabled]="gameNotInProgress" (click)="submitGuessedLetter()">
+    Check letter
+  </button>
+</div>
+<span>Wrong guesses: {{ gameService.wrongUserGuessesCount() }}</span>
+
+<button (click)="gameService.startNewGame()">New Game</button>
+
+<dialog class="result-dialog" #resultDialog>
+  @if(gameService.gameStatus() === gameStatusEnum.WON) {
+  <h1>Congratulations!</h1>
+  <p>You won!</p>
+  <p>
+    The word <b>{{ gameService.wordToGuess() }}</b> was found successfully.
+  </p>
+  } @else {
+  <h1>Game over.</h1>
+  <p>Sorry, you lost!</p>
+  <p>
+    The word you searched for was <b>{{ gameService.wordToGuess() }}</b
+    >.
+  </p>
+  }
+
+  <button (click)="restartGame()">
+    {{
+      gameService.gameStatus() === gameStatusEnum.WON ? "New Game" : "Try again"
+    }}
+  </button>
+</dialog>
