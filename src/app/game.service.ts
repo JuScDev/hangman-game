@@ -49,16 +49,18 @@ export class GameService {
   }
 
   public checkGuessedLetter(guessedLetter: string): GameStatus {
-    if (!guessedLetter) {
+    if (!guessedLetter || /\d/.test(guessedLetter)) {
       return GameStatus.IN_PROGRESS;
     }
+
+    guessedLetter = guessedLetter.toLowerCase();
 
     this.alreadyGuessedLetters.update((alreadyGuessedLetters) => [
       ...alreadyGuessedLetters,
       guessedLetter,
     ]);
 
-    if (!this.wordToGuess().includes(guessedLetter)) {
+    if (!this.wordToGuess().toLowerCase().includes(guessedLetter)) {
       this.wrongUserGuessesCount.update((wrongUserGuessesCount) => {
         if (wrongUserGuessesCount + 1 >= this._maxWrongGuesses) {
           this._finishGame(GameStatus.LOST);
@@ -67,10 +69,10 @@ export class GameService {
         return wrongUserGuessesCount + 1;
       });
     } else {
-      Array.from(this.wordToGuess()).forEach((letter, index) => {
+      Array.from(this.wordToGuess().toLowerCase()).forEach((letter, index) => {
         if (letter === guessedLetter) {
           this.wordToGuessArray.update((wordToGuessArray) => {
-            wordToGuessArray[index] = guessedLetter;
+            wordToGuessArray[index] = this.wordToGuess()[index];
             return wordToGuessArray;
           });
         }

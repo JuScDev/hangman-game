@@ -1,59 +1,53 @@
-# HangmanGame
+# Hangman Game
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+This is a simple Hangman game built with Angular. The game allows users to guess letters to form a word, with a limited number of wrong guesses allowed before the game is lost.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- Random word generation using an external API
+- Tracks the number of games won and lost
+- Responsive SVG-based hangman drawing
+- Local storage persistence for game statistics
 
-```bash
-ng serve
-```
+## Installation
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/hangman-game.git
+   cd hangman-game
+   ```
 
-## Code scaffolding
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+3. Run the application:
+   ```bash
+   ng serve
+   ```
 
-```bash
-ng generate component component-name
-```
+4. Open your browser and navigate to `http://localhost:4200`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Usage
 
-```bash
-ng generate --help
-```
+- Start a new game by clicking the "New Game" button.
+- Guess letters by typing in the input field and pressing Enter or clicking the "Check letter" button.
+- The game will display the hangman drawing as you make wrong guesses.
+- The game ends when you either guess the word correctly or reach the maximum number of wrong guesses.
+- View your game statistics (games won and lost) at the bottom of the page.
 
-## Building
+## Project Structure
 
-To build the project run:
+- `src/app/hangman-svg/`: Contains the Hangman SVG component for drawing the hangman.
+- `src/app/game/`: Contains the main game component and related styles.
+- `src/app/services/`: Contains services for game logic, persistence, and API communication.
+- `src/app/models/`: Contains the game status model.
 
-```bash
-ng build
-```
+## Contributing
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
-## Running unit tests
+## License
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project is licensed under the MIT License.
